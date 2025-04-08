@@ -1,21 +1,25 @@
-const { createApp, ref } = Vue;
+const { createApp, ref, reactive } = Vue;
 
 const app = createApp({
   setup() {
-    const novaTarefa = ref("");
-
-    const situacao = ref(0);
+    const novaTarefa = reactive({
+      descricao: "",
+      situacao: 0,
+    });
 
     const tarefas = ref([]);
 
     adicionarTarefa = () => {
-      tarefas.value.push(novaTarefa.value);
-      novaTarefa.value = "";
-    }
-    modificaSituacao = () => {
-      situacao.value = (situacao.value + 1) % 4
+      tarefas.value.push({ ...novaTarefa });
+
+      novaTarefa.descricao = "";
+      novaTarefa.situacao = 0;
     }
 
-    return { novaTarefa, tarefas, adicionarTarefa, modificaSituacao, situacao };
+    modificaSituacao = (tarefa) => {
+      tarefa.situacao = (tarefa.situacao + 1) % 4
+    }
+
+    return { novaTarefa, tarefas, adicionarTarefa, modificaSituacao };
   }
 }).mount("#app");
